@@ -27,45 +27,34 @@
             50% { color: #ff0066; transform: translateX(2px); }
             100% { color: #00ff99; }
         }
-        .o-container {
-            display: inline-block;
-            position: relative;
-        }
-        #hidden-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 3px;
-            height: 3px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
 
-    <h1>CRYPTA <span class="o-container">N<span id="hidden-btn"></span>O</span>CTIS</h1>
-
+    <h1>CRYPTA NOCTIS</h1>
     <p class="glitch">L’obscurité cache la vérité. Déchiffrez-la.</p>
 
     <script>
-        // Désactiver le clic droit
+        let password = "umbraprimus"; // Défini ton mot de passe ici
+        let input = "";
+
+        document.addEventListener("keydown", function(event) {
+            input += event.key;
+
+            if (input === password) {
+                window.location.href = "secret.html"; // Redirection dès que le mot de passe est entré
+            }
+        });
+
+        // Protection contre accès au code source
         document.addEventListener("contextmenu", function(event) {
             event.preventDefault();
         });
 
-        // Bloquer les raccourcis qui permettent d’accéder au code source
         document.addEventListener("keydown", function(event) {
             if (event.ctrlKey && (event.key === 'u' || event.key === 'U' || event.key === 'Shift' || event.key === 'I' || event.key === 'i' || event.key === 'J' || event.key === 'j' || event.key === 'F12')) {
                 event.preventDefault();
             }
-        });
-
-        // Redirection du bouton caché
-        document.getElementById("hidden-btn").addEventListener("click", function() {
-            window.location.href = "login.html";
         });
     </script>
 
