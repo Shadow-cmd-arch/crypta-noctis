@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypta Noctis</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            background-color: #000;
+            color: #00ff99;
+            font-family: monospace;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 15%;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+        .glitch {
+            font-size: 1.5em;
+            opacity: 0.8;
+            animation: glitch 2s infinite;
+        }
+        @keyframes glitch {
+            0% { color: #00ff99; }
+            50% { color: #ff0066; }
+            100% { color: #00ff99; }
+        }
+        #user-rank {
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>CRYPTA NOCTIS</h1>
+    <p class="glitch">L’obscurité cache la vérité. Déchiffrez-la.</p>
+    
+    <div id="user-rank">Vérification du rang...</div>
+
+    <script>
+        // Connexion à Supabase
+        const supabaseUrl = "https://xxxxxxxxxxxx.supabase.co"; // Remplace avec ton URL Supabase
+        const supabaseKey = "TON_CLE_SUPABASE"; // Mets ta clé API ici
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        async function getUserRank() {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                document.getElementById("user-rank").innerText = "Accès restreint";
+                return;
+            }
+
+            const { data } = await supabase
+                .from("users")
+                .select("rank")
+                .eq("id", user.id)
+                .single();
+
+            document.getElementById("user-rank").innerText = `Rang : ${data.rank || "Inconnu"}`;
+        }
+
+        getUserRank();
+    </script>
+
+</body>
+</html>
