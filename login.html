@@ -3,56 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypta Noctis</title>
+    <title>L'Obscurité Cache la Vérité</title>
     <style>
         body {
             background-color: #000;
             color: #00ff99;
             font-family: monospace;
             text-align: center;
+            overflow: hidden;
         }
         h1 {
-            margin-top: 15%;
+            margin-top: 10%;
             text-transform: uppercase;
             letter-spacing: 4px;
-            position: relative;
         }
-        .glitch {
-            font-size: 1.5em;
-            opacity: 0.8;
-            animation: glitch 2s infinite;
-        }
-        @keyframes glitch {
-            0% { color: #00ff99; }
-            50% { color: #ff0066; transform: translateX(2px); }
-            100% { color: #00ff99; }
+        .secret-zone {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0; /* La zone est invisible */
         }
     </style>
 </head>
 <body>
 
-    <h1>CRYPTA NOCTIS</h1>
-    <p class="glitch">L’obscurité cache la vérité. Déchiffrez-la.</p>
+    <h1>L'Obscurité Cache la Vérité</h1>
+
+    <div class="secret-zone" id="secretZone"></div>
 
     <script>
-        let password = "umbraprimus"; // Défini ton mot de passe ici
-        let input = "";
+        let secretZone = document.getElementById("secretZone");
+        let pressStartTime = null;
+        let pressDurationRequired = 10000; // 10 secondes
 
-        document.addEventListener("keydown", function(event) {
-            input += event.key;
+        function startPress() {
+            pressStartTime = Date.now();
+        }
 
-            if (input === password) {
-                window.location.href = "secret.html"; // Redirection dès que le mot de passe est entré
+        function endPress() {
+            if (pressStartTime) {
+                let pressDuration = Date.now() - pressStartTime;
+                if (pressDuration >= pressDurationRequired) {
+                    window.location.href = "secret.html"; // Déverrouillage après 10s
+                }
             }
-        });
+            pressStartTime = null;
+        }
 
-        // Protection contre accès au code source
-        document.addEventListener("contextmenu", function(event) {
-            event.preventDefault();
-        });
+        // Détection sur PC (Souris)
+        secretZone.addEventListener("mousedown", startPress);
+        secretZone.addEventListener("mouseup", endPress);
 
-        document.addEventListener("keydown", function(event) {
-            if (event.ctrlKey && (event.key === 'u' || event.key === 'U' || event.key === 'Shift' || event.key === 'I' || event.key === 'i' || event.key === 'J' || event.key === 'j' || event.key === 'F12')) {
+        // Détection sur mobile (Tactile)
+        secretZone.addEventListener("touchstart", startPress);
+        secretZone.addEventListener("touchend", endPress);
+
+        // Sécurisation contre l’inspection du code
+        document.addEventListener("contextmenu", event => event.preventDefault());
+        document.addEventListener("keydown", event => {
+            if (event.ctrlKey && ["u", "U", "Shift", "I", "i", "J", "j", "F12"].includes(event.key)) {
                 event.preventDefault();
             }
         });
